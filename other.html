@@ -1,0 +1,99 @@
+<?php
+include 'db.php';
+
+$roll_no = $_GET['roll_no'];
+
+$sql = "/* FULL QUERY ABOVE */";
+$result = $conn->query($sql);
+
+$data = [];
+while ($row = $result->fetch_assoc()) {
+    $data[] = $row;
+}
+
+$student = $data[0];
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Marksheet</title>
+<style>
+body { font-family: Arial; }
+table { border-collapse: collapse; width: 100%; }
+td, th { border: 1px solid #000; padding: 5px; font-size: 12px; }
+@media print {
+  .no-print { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<button class="no-print" onclick="window.print()">Print</button>
+
+<h2 align="center">University of Rajasthan</h2>
+<h3 align="center">
+<?= $student['course_name'] ?> <?= $student['part'] ?> - <?= $student['exam_session'] ?>
+</h3>
+
+<table>
+<tr>
+<td><strong>Name</strong></td><td><?= $student['name'] ?></td>
+<td><strong>Roll No</strong></td><td><?= $student['roll_no'] ?></td>
+</tr>
+<tr>
+<td><strong>Father's Name</strong></td><td><?= $student['father_name'] ?></td>
+<td><strong>Enrollment No</strong></td><td><?= $student['enrollment_no'] ?></td>
+</tr>
+<tr>
+<td><strong>Mother's Name</strong></td><td><?= $student['mother_name'] ?></td>
+<td><strong>Category</strong></td><td><?= $student['category'] ?></td>
+</tr>
+<tr>
+<td><strong>College</strong></td><td><?= $student['college'] ?></td>
+<td><strong>Medium</strong></td><td><?= $student['medium'] ?></td>
+</tr>
+</table>
+
+<br>
+
+<table>
+<tr>
+<th>Subject</th>
+<th>Max</th>
+<th>Min</th>
+<th>I</th>
+<th>II</th>
+<th>III</th>
+<th>IV</th>
+<th>V</th>
+<th>Total</th>
+<th>Result</th>
+</tr>
+
+<?php foreach ($data as $row): ?>
+<tr>
+<td><?= $row['subject_name'] ?></td>
+<td><?= $row['max_marks'] ?></td>
+<td><?= $row['min_marks'] ?></td>
+<td><?= $row['marks_1'] ?></td>
+<td><?= $row['marks_2'] ?></td>
+<td><?= $row['marks_3'] ?></td>
+<td><?= $row['marks_4'] ?></td>
+<td><?= $row['marks_5'] ?></td>
+<td><?= $row['subject_total'] ?></td>
+<td><?= $row['remarks'] ?></td>
+</tr>
+<?php endforeach; ?>
+
+<tr>
+<td colspan="8" align="right"><strong>Total Marks</strong></td>
+<td colspan="2"><strong><?= $student['total_marks'] ?> (<?= $student['result_status'] ?>)</strong></td>
+</tr>
+</table>
+
+<p><strong>Disclaimer:</strong> In case of discrepancy, the University marksheet shall be treated as final.</p>
+
+</body>
+</html>
